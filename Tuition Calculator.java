@@ -1,27 +1,24 @@
-package GroceryList;
+package tuitioncalculator;
+
+import java.util.Scanner;
 import java.util.*;
 import java.lang.Math;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-public class GroceryListing {
-    public static void main(String[] args) throws FileNotFoundException {
-        Scanner reader = null;
-        String[] itemName = new String[9];
-        double[] price = new double[9];
-        double[] quantity = new double[9];
-        String[] fooditem = new String[9];
-        boolean[] fooditem1 = new boolean[9];
-        String[] bulk = new String[9];
+public class TuitionClass {
+private static Scanner reader;
+	public static void main(String[] args) throws FileNotFoundException {
+		String[] namesList = new String[10];
+        String[] classList = new String[10];
+        int[] creditHoursList = new int[10];
+        String[] inDistrictList = new String[10];
+        String[] courseFee = new String[10];
+        double[] totalTuitionList = new double[10];
         String readarray;
-        
-        try {
-			reader = new Scanner(new File(System.getProperty("user.dir") + "/Grocery.txt"));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+       
+        reader = new Scanner(new File("Names.txt"));
         int index;
         
         index = 0;
@@ -29,91 +26,80 @@ public class GroceryListing {
         
         category = 0;
         if (category == 0) {
-            for (index = 0; index <= 8; index++) {
+            for (index = 0; index <= 9; index++) {
                 readarray = reader.nextLine();
-                itemName[index] = readarray;
-                System.out.println(itemName[index]);
+                namesList[index] = readarray;
             }
             reader.close();
-            double readprice;
+            String readclasses;
             
-            try {
-    			reader = new Scanner(new File(System.getProperty("user.dir") + "/price.txt"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            for (index = 0; index <= 8; index++) {
-                readprice = reader.nextDouble();
-                price[index] = readprice;
-                System.out.println(price[index]);
+            reader = new Scanner(new File("Classes.txt"));
+            for (index = 0; index <= 9; index++) {
+                readclasses = reader.nextLine();
+                classList[index] = readclasses;
             }
             reader.close();
             int readquantity;
             
-			reader = new Scanner(new File(System.getProperty("user.dir") + "/quantity.txt"));
-            for (index = 0; index <= 8; index++) {
+            reader = new Scanner(new File("CreditHours.txt"));
+            for (index = 0; index <= 9; index++) {
                 readquantity = reader.nextInt();
-                quantity[index] = readquantity;
+                creditHoursList[index] = readquantity;
             }
             reader.close();
-            String readfood;
+            String readinout;
             
             try {
-    			reader = new Scanner(new File(System.getProperty("user.dir") + "/Foodlist.txt"));
+				reader = new Scanner(new File("InDistrict.txt"));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            for (index = 0; index <= 8; index++) {
-                readfood = reader.nextLine();
-                fooditem[index] = readfood;
+            for (index = 0; index <= 9; index++) {
+                readinout = reader.nextLine();
+                inDistrictList[index] = readinout;
             }
             reader.close();
-            for (index = 0; index <= 8; index++) {
-                if (fooditem[index].equals("Y")) {
-                    fooditem1[index] = true;
+        }
+        double total;
+        
+        total = 0;
+        int[] numCourse = new int[10];
+        
+        for (index = 0; index <= 9; index++) {
+            numCourse[index] = (int) ((double) creditHoursList[index] / 3);
+        }
+        for (index = 0; index <= 9; index++) {
+            int x;
+            
+            x = 0;
+            while (classList[index].equals("Senior") && x == 0) {
+                courseFee[index] = "No";
+                if (inDistrictList[index].equals("No") || numCourse[index] <= 3) {
+                    totalTuitionList[index] = 100 * creditHoursList[index] + 100;
+                    x = 1;
                 } else {
-                    fooditem1[index] = false;
+                    totalTuitionList[index] = 100 * creditHoursList[index];
+                    x = 1;
                 }
             }
-            String readbulk;
-            
-            try {
-    			reader = new Scanner(new File(System.getProperty("user.dir") + "/Bulk.txt"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            for (index = 0; index <= 8; index++) {
-                readbulk = reader.nextLine();
-                bulk[index] = readbulk;
+            while (!classList[index].equals("Senior") && x == 0) {
+                if (inDistrictList[index].equals("No") && numCourse[index] < 4) {
+                    courseFee[index] = "Yes";
+                    totalTuitionList[index] = 100 * creditHoursList[index] + 50 * numCourse[index];
+                    x = 3;
+                } else {
+                    courseFee[index] = "No";
+                    totalTuitionList[index] = 100 * creditHoursList[index];
+                    x = 3;
+                }
             }
-            reader.close();
+            System.out.println(totalTuitionList[index]);
         }
-        double[] total = new double[9];
-        double tax;
-        
-        tax = 0;
-        for (index = 0; index <= 8; index++) {
-            total[index] = quantity[index] * price[index];
-            if (fooditem1[index] == false) {
-                tax = total[index] * .1;
-                total[index] = total[index] + tax;
-            }
-            System.out.println(total[index]);
-        }
-        double discount;
-        
-        tax = 0;
-        discount = 0;
-        index = 0;
-        double totalcost;
-        
-        totalcost = 0;
-        for (index = 0; index <= 8; index++) {
-            totalcost = total[index] + totalcost;
-        }
-        System.out.println(totalcost);
-    }
+	}
 }
+
+    
+
+
+
