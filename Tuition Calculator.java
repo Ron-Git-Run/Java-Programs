@@ -10,7 +10,7 @@ import java.io.FileReader;
 public class TuitionClass {
 private static Scanner reader;
 	public static void main(String[] args) throws FileNotFoundException {
-		String[] namesList = new String[10];
+	String[] namesList = new String[10];
         String[] classList = new String[10];
         int[] creditHoursList = new int[10];
         String[] inDistrictList = new String[10];
